@@ -65,3 +65,6 @@ enterenvironment.sh
 crm/tickets\.json
 
 .Rhistory
+modelli\.csv
+
+ticket\.csv
