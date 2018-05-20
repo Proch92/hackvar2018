@@ -1,0 +1,6 @@
+File description:
+
+	userData.js	- contains the SCHEMA with data from chat and acty 				  sessions
+	userID.js	- contains the SCHEMA with the mapping between the spark 				  ID and acty ID for each user 	
+	models.js	- required to initialize multiple schemas in a single node 				  session
+	testfile.js	- random code
