@@ -9,3 +9,6 @@ exports.initialize = function() {
 
 //To inizialize all schemas for a given node session:
 //		require('models.js').initialize()
+//
+//To get a model:
+//		var myModel = mongoose.model( "myModel" );

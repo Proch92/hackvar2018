@@ -15,4 +15,9 @@ module.exports = function() {
         if (err) return console.error(err);
         console.log("operation complete")
 	})
+
+	userID.find(function (err, schema_data) {
+        if (err) return console.error(err);
+        return schema_data;
+	})
 };
