@@ -1,4 +1,4 @@
-var models = ['userData.js', 'userId.js'];
+var models = ['./userData_chatbot.js', './userData_acty.js', './userID.js'];
 
 exports.initialize = function() {
     var l = models.length;
@@ -9,3 +9,6 @@ exports.initialize = function() {
 
 //To inizialize all schemas for a given node session:
 //		require('models.js').initialize()
+//
+//To get a model:
+//		var myModel = mongoose.model( "myModel" );
