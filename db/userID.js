@@ -11,13 +11,13 @@ module.exports = function() {
 	});
 	mongoose.model("userID", userID);
 
-	userID.save(function (err, userID) {
-        if (err) return console.error(err);
-        console.log("operation complete")
-	})
+	//userID.save(function (err, userID) {
+    //    if (err) return console.error(err);
+    //    console.log("operation complete")
+	//})
 
-	userID.find(function (err, schema_data) {
-        if (err) return console.error(err);
-        return schema_data;
-	})
+	//userID.find(function (err, schema_data) {
+    //    if (err) return console.error(err);
+    //    return schema_data;
+	//})
 };

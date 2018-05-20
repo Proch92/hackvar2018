@@ -1,4 +1,4 @@
-var models = ['userData.js', 'userId.js'];
+var models = ['./userData_chatbot.js', './userData_acty.js', './userID.js'];
 
 exports.initialize = function() {
     var l = models.length;

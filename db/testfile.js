@@ -1,18 +1,7 @@
-var test = new indilium_model({
-        modello_macchina:       'xz1',
-        tipo_problema:          'software',
-        operatore_lv1:          '1234',
-        operatore_lv2:          '',
-        bot:                    1,
-        customer_sat:           'high',
-        data:                   '2018-05-20T13:00:00',
-        durata:                 267 
-});
+var mongoose = require('mongoose');
 
-test.save(function (err, test) {
-        if (err) return console.error(err);
-        console.log("operation complete")
-})
+require('./models.js').initialize()
+var userID = mongoose.model('userID');
 
 //DB CONNECTION
 mongoose.connect('mongodb://localhost:27017/indilium-db');
@@ -22,8 +11,7 @@ db.once('open', function() {
         console.log('CONNECTION SUCCESSFUL');
 });
 
-//METHODS
-indilium_model.find(function (err, schema_data) {
-        if (err) return console.error(err);
-        return schema_data;
-})
+var user1 = new userID({chatbot_id: '1234', acty_id: '4321'});
+user1.save(function(err) {
+        if(err) throw err;
+});
