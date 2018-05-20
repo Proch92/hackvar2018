@@ -12,6 +12,6 @@ db.once('open', function() {
 });
 
 var user1 = new userID({chatbot_id: '1234', acty_id: '4321'});
-user1.save(function(err) {
+user1.save(function(err, user1) {
         if(err) throw err;
 });
