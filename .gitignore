@@ -63,3 +63,5 @@ typings/
 # anaconda stuff
 enterenvironment.sh
 crm/tickets\.json
+
+.Rhistory

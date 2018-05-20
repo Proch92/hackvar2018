@@ -24,7 +24,7 @@ class Tickets(Resource):
 		tickets = db.all()
 		
 		maxid = len(tickets) + 1
-		newticket = {'id': maxid, 'desc': args['desc'], 'open': 'open', 'date_created': date2str(datetime.datetime.now())}
+		newticket = {'id': maxid, 'desc': args['desc'], 'open': 'open', 'date_created': self.date2str(datetime.datetime.now())}
 		
 		db.insert(newticket)
 		return newticket, 201
@@ -33,7 +33,7 @@ class Tickets(Resource):
 		args = parser.parse_args()
 		
 		query = Query()
-		ticket = db.update({'open': 'close'}, query.id == args['id'], 'date-closed': date2str(datetime.datetime.now()))
+		ticket = db.update({'open': 'close', 'date_closed': self.date2str(datetime.datetime.now())}, query.id == args['id'])
 
 		return ticket, 202
 
