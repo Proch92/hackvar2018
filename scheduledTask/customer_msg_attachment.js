@@ -9,11 +9,11 @@ var mongoose = require('mongoose');
 
 //DB CONNECTION
 mongoose.connect('mongodb://localhost:27017/indilium-db');
-//var db = mongoose.connection;
-//db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
-//db.once('open', function() {
-//        console.log('CONNECTION SUCCESSFUL');
-//});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
+db.once('open', function() {
+        console.log('CONNECTION SUCCESSFUL');
+});
 
 //SCHEMA DEFINITION
 //var Schema = mongoose.Schema;
@@ -68,10 +68,8 @@ function getAttachment(idAssistenza, idAllegato){
           password: '5kBnnT6gSAIFa40q6ekmDvWE'
         }
       }
-    console.log("troia");
-
-    request.get(options)
-    .on('response', function(err, res, body) {
+    console.log("options: "+options.url);
+    request.get(options, function(err, res, body) {
          console.log(response.statusCode) // 200 
          body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
      });
