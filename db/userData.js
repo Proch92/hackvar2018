@@ -16,4 +16,9 @@ module.exports = function() {
         durata 				:   Number
 	});
 	mongoose.model("userData", userData);
+
+	userData.save(function (err, userData) {
+        if (err) return console.error(err);
+        console.log("operation complete")
+	})
 };
