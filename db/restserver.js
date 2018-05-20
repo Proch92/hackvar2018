@@ -1,13 +1,24 @@
 var restify = require('restify');
-//var db = require('indiliumdb');
-//var db = require('usersdb');
+const mongoose = require('mongoose');
+const assert = require('assert')
+require('models.js').initialize();
+
+const url = "mongodb://localhost:27017/indilium-db";
 
 function insertUser(req, res, next) {
-	params = req.query;
-	//save to db
+
+	
 	res.send(201);
 	next();
 }
+
+mongo.connect('mongodb://localhost:27017/indilium-db');
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	console.log('successful')
+});
 
 var server = restify.createServer();
 server.use(restify.plugins.queryParser());
