@@ -70,3 +70,9 @@ modelli\.csv
 ticket\.csv
 
 db/data/
+
+db/testfile.js
+
+.vscode/
+
+ticket.csv

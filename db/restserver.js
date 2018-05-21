@@ -5,7 +5,6 @@ const assert = require('assert');
 //IMPORT MODELS
 require('./models.js').initialize();
 var UserID = mongoose.model('userID');
-//var UserData_acty = mongoose.model('userData_acty');
 var UserData_chatbot = mongoose.model('userData_chatbot');
 var userData_acty = mongoose.model("userData_acty", ({
     tag 				: 	String,
