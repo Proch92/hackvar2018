@@ -221,7 +221,7 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                 if(element){
                     //console.log(element._id +' roba: '+element.customer_id+' element.date: '+element.date);
                     //CREATE A NEW ACTY RECORD 
-                    var actyUser = new modelUserData_acty({
+                    var actyUser = new userData_acty({
                         tag 				: 	element.title,
                         id 					: 	element._id,
                         operatore_lv1       :   element.customer_id,
