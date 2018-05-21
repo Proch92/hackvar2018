@@ -70,7 +70,7 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 
 server.post('/users:sparkid:actyid', insertUser);
-server.post('/users:modello:capitolo', insertResource);
+server.post('/resource:modello:capitolo', insertResource);
 server.post('/acty:tagapi:idapi:op1api:op2api:custapi:dataapi:durapi:fotoapi:videoapi', insertActy);
 
 server.listen(8080, function() {
