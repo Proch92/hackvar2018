@@ -18,6 +18,11 @@ var userData_acty = mongoose.model("userData_acty", ({
     n_foto 				: 	Number,
     n_video 			: 	Number
 }));
+var ChatResources = mongoose.model("chatresources", ({
+    modello 			: 	String,
+    capitolo 			: 	String,
+}));
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/indilium-db');
 var db = mongoose.connection;
@@ -30,6 +35,14 @@ db.once('open', function() {
 function insertUser(req, res, next) {
 	newuser = new UserID({chatbot_id: req.params.sparkid, acty_id: req.params.actyid});
 	newuser.save().then(() => console.log('new User created'));
+	
+	res.send(201);
+	next();
+}
+
+function insertResource(req, res, next) {
+	newresource = new ChatResources({modello: req.params.modello, capitolo: req.params.capitolo});
+	newresouce.save().then(() => console.log('new resource created'));
 	
 	res.send(201);
 	next();
@@ -57,6 +70,7 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 
 server.post('/users:sparkid:actyid', insertUser);
+server.post('/resource:modello:capitolo', insertResource);
 server.post('/acty:tagapi:idapi:op1api:op2api:custapi:dataapi:durapi:fotoapi:videoapi', insertActy);
 
 server.listen(8080, function() {
