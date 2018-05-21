@@ -19,8 +19,8 @@ var userData_acty = mongoose.model("userData_acty", ({
     n_video 			: 	Number
 }));
 var ChatResources = mongoose.model("chatresources", ({
-    modello 				: 	String,
-    capitolo 				: 	String,
+    modello 			: 	String,
+    capitolo 			: 	String,
 }));
 
 
