@@ -68,3 +68,5 @@ crm/tickets\.json
 modelli\.csv
 
 ticket\.csv
+
+db/data/
