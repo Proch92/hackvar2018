@@ -1,7 +1,6 @@
 var program = require('commander');
 var momenttz = require("moment-timezone");
 var https = require('https');
-<<<<<<< Updated upstream
 //var request = require('request');
 var fs = require('fs');
 var mongoose = require('mongoose');
@@ -15,7 +14,7 @@ db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
 db.once('open', function() {
         console.log('CONNECTION SUCCESSFUL');
 });
-var userData_acty = mongoose.Schema({
+var userData_acty = mongoose.model("userData_acty", ({
     tag 				: 	String,
     id 					: 	String,
     operatore_lv1       :   String,
@@ -25,26 +24,11 @@ var userData_acty = mongoose.Schema({
     durata              :   Number,
     n_foto 				: 	Number,
     n_video 			: 	Number
-});
+}));
 
 
 //var userData_acty = mongoose.model('Kitten', kittySchema);
-var modelUserData_acty = mongoose.model("userData_acty", userData_acty);
-=======
-var request = require('request');
-var fs = require('fs');
-//var actyTicket = require('../db/userData_acty.js');
-//HANDLE DEPENDANCES
-var mongoose = require('mongoose');
-
-//DB CONNECTION
-mongoose.connect('mongodb://localhost:27017/indilium-db');
-//var db = mongoose.connection;
-//db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
-//db.once('open', function() {
-//        console.log('CONNECTION SUCCESSFUL');
-//});
->>>>>>> Stashed changes
+//var modelUserData_acty = mongoose.model("userData_acty", userData_acty);
 
 //SCHEMA DEFINITION
 //var Schema = mongoose.Schema;
@@ -59,11 +43,7 @@ var userData_acty = new Schema({
     durata              :   Number,
     n_foto 				: 	Number,
     n_video 			: 	Number
-<<<<<<< Updated upstream
 });
-=======
-});*/
->>>>>>> Stashed changes
 var userData_acty = mongoose.model("userData_acty", ({
     tag 				: 	String,
     id 					: 	String,
@@ -75,11 +55,7 @@ var userData_acty = mongoose.model("userData_acty", ({
     n_foto 				: 	Number,
     n_video 			: 	Number
 }));
-<<<<<<< Updated upstream
     
-=======
-    /*
->>>>>>> Stashed changes
 
         Modello Macchina 
         Tipo Problema (Hardware/Software) 
@@ -95,7 +71,6 @@ var userData_acty = mongoose.model("userData_acty", ({
         Numero Attachment Video
 
     */
-<<<<<<< Updated upstream
 //5b016d2caa1623ed3602d6c9/0
 async function getAttachment(idAssistenza, totAllegati){
     for(var i=0; i<totAllegati; i++){
@@ -136,58 +111,13 @@ async function getAttachment(idAssistenza, totAllegati){
           .on('finish', resolve));
      //request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
 
-=======
-
-//5b016d2caa1623ed3602d6c9/0
-function getAttachment(idAssistenza, idAllegato){
-    //../files/'+
-    //console.log(tmp);
-    var options = {
-        url: 'https://api.acty.com/wsapi/assistance/attachment/'+idAssistenza+'/'+idAllegato,
-        auth: {
-          user: '567',
-          password: '5kBnnT6gSAIFa40q6ekmDvWE'
-        }
-      }
-    console.log("troia");
-
-    request.get(options)
-    .on('response', function(err, res, body) {
-         console.log(response.statusCode) // 200 
-         body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-     });
->>>>>>> Stashed changes
     /*request(options, function (err, res, body) {
         if (err) {
           console.log("err: "+err);
           return;
         }
-<<<<<<< Updated upstream
     })*/
   /*
-=======
-        console.dir('headers', res.headers);
-        console.dir('status code', res.statusCode);
-        //console.dir(body)
-        console.log("response: "+response);
-        console.log("body: "+body);
-        body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
- 
-    })*/
-  
-   /* request.get(
-        { url: tmp,
-            {'auth': {
-                'user':'567', 
-                'password':'5kBnnT6gSAIFa40q6ekmDvWE', 
-                'sendImmediately': false
-            }
-        }},function (error, response, body) {});
-              response.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-          */  
-    /*
-    
->>>>>>> Stashed changes
     request({url:tmp,
              user:'567', 
              password: '5kBnnT6gSAIFa40q6ekmDvWE'}, function (error, response, body) {
@@ -199,11 +129,7 @@ function getAttachment(idAssistenza, idAllegato){
             console.log('errore!');
         }
     });*/
-<<<<<<< Updated upstream
 
-=======
-}
->>>>>>> Stashed changes
 
 function postJson(host, port, persistentObj, auth, prefix, url, done) {
     var postData = JSON.stringify(persistentObj);
@@ -295,11 +221,7 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                 if(element){
                     //console.log(element._id +' roba: '+element.customer_id+' element.date: '+element.date);
                     //CREATE A NEW ACTY RECORD 
-<<<<<<< Updated upstream
                     var actyUser = new modelUserData_acty({
-=======
-                    var actyUser = new userData_acty({
->>>>>>> Stashed changes
                         tag 				: 	element.title,
                         id 					: 	element._id,
                         operatore_lv1       :   element.customer_id,
@@ -310,19 +232,10 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                         n_foto 				: 	element.photos,
                         n_video 			: 	element.videos
                     });
-<<<<<<< Updated upstream
                     actyUser.save(function(err, actyUser) {
                         if(err) throw err;
                     });
                     getAttachment(element._id, (element.photos + element.videos));
-=======
-                    actyUser.save(function(err, user1) {
-                        if(err) throw err;
-                    });
-                    for(var i=0; i<(element.photos + element.videos)-1; i++){
-                        getAttachment(element._id, i);
-                    }
->>>>>>> Stashed changes
                 }
             });
         }
