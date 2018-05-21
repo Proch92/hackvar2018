@@ -19,7 +19,7 @@ var userData_acty = mongoose.model("userData_acty", ({
     n_video 			: 	Number
 }));
 
-mongoose.connect('mongodb://0.0.0.0:27017/indilium-db');
+mongoose.connect('mongodb://127.0.0.1:27017/indilium-db');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -59,6 +59,6 @@ server.use(restify.plugins.queryParser());
 server.post('/users:sparkid:actyid', insertUser);
 server.post('/acty:tagapi:idapi:op1api:op2api:custapi:dataapi:durapi:fotoapi:videoapi', insertActy);
 
-server.listen(8080, '127.0.0.1', function() {
+server.listen(8080, '0.0.0.0', function() {
 	console.log('%s listening at %s', server.name, server.url);
 });
