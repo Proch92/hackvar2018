@@ -57,12 +57,14 @@ user3.save(function(err, user1) {
 //FINDS THE FIRST ELEMENT IN A SCHEMA THAT SATISFIES THE QUERY
 userData_acty.findOne({modello_macchina : 'xyz'}, function (err, data) {
         if (err) return handleError(err);
-        console.log('%s\n%s\n%s', data.modello_macchina, data.tipo_problema, data.id);
 });
 
-try {
-  const results = userData_chatbot.find({});
-  console.log(results);
-} catch (err) {
-  throw err;
-}
+//FINDS ALL ELEMENTS IN A SCHEMA THAT SATISFY THE QUERY
+userData_acty.find({modello_macchina : 'xyz'}, function (err, data) {
+        if (err) return handleError(err);
+});
+
+//FINDS ALL ELEMENTS IN A SCHEMA
+userData_acty.find({}, function (err, data) {
+        if (err) return handleError(err);
+});
