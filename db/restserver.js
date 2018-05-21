@@ -59,6 +59,6 @@ server.use(restify.plugins.queryParser());
 server.post('/users:sparkid:actyid', insertUser);
 server.post('/acty:tagapi:idapi:op1api:op2api:custapi:dataapi:durapi:fotoapi:videoapi', insertActy);
 
-server.listen(8080, '0.0.0.0', function() {
+server.listen(8080, function() {
 	console.log('%s listening at %s', server.name, server.url);
 });
