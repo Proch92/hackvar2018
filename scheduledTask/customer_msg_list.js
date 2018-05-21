@@ -1,6 +1,22 @@
 var program = require('commander');
 var momenttz = require("moment-timezone");
 var https = require('https');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1:27017/indilium-db');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
+db.once('open', function() {
+        console.log('CONNECTION SUCCESSFUL');
+});
+var userData_actyMsg = mongoose.model("userData_actyMsg", ({
+    id 					: 	String,
+    from_oper : Boolean,
+    operatore_lv1       :   String,
+    data                :   Date,
+    text              :   String
+}));
 
 function postJson(host, port, persistentObj, auth, prefix, url, done) {
     var postData = JSON.stringify(persistentObj);
@@ -87,11 +103,27 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
             console.log(err);
         } else {
             console.log(httpResul);
-            console.log(jsonStringify(httpJson));
+            //console.log(jsonStringify(httpJson));
+		httpJson.messages.forEach(function(element) {
+		if(element){
+		    //CREATE A NEW ACTY RECORD 
+		    var actyUser = new userData_actyMsg({
+			    id : 	element._id,
+			    from_oper : element.from_oper,
+			    operatore_lv1       :   element.customer.customer_id,
+			    data                :   element.date,
+			    text              :   element.text
+		    });
+		    actyUser.save(function (err, actyUser){
+		        if (err) return console.error(err);
+		            console.log('acty record created');
+		    });
+		}
+            });
         }
-        process.exit(0);
 });
+        //process.exit(0);
 
-//node customer_msg_list.js -u 567 -p 5kBnnT6gSAIFa40q6ekmDvWE -h api.acty.com 1000
+//node customer_msg_list.js -u 567 -p 5kBnnT6gSAIFa40q6ekmDvWE -h api.acty.com 86400
 
 //node customer_msg_attachment.js -u 567 -p 5kBnnT6gSAIFa40q6ekmDvWE -h api.acty.com 86400

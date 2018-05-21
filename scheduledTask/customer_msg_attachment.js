@@ -4,10 +4,12 @@ var https = require('https');
 //var request = require('request');
 var fs = require('fs');
 var mongoose = require('mongoose');
+
 let request = require('request-promise');
 //var actyTicket = require('../db/userData_acty.js');
 //HANDLE DEPENDANCES
 //DB CONNECTION
+//mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://127.0.0.1:27017/indilium-db');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
@@ -232,14 +234,23 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                         n_foto 				: 	element.photos,
                         n_video 			: 	element.videos
                     });
-                    actyUser.save(function(err, actyUser) {
-                        if(err) throw err;
+                    console.log('actyUser: '+actyUser);
+                    /*actyUser.save(function(err, actyUser) {
+                        if(err){ 
+                            throw err;
+                        }else{
+                            console.log(actyUser)
+                        }
+                    });*/
+                    actyUser.save(function (err, actyUser){
+                        if (err) return console.error(err);
+                            console.log('acty record created')
                     });
                     getAttachment(element._id, (element.photos + element.videos));
                 }
             });
         }
-        process.exit(0);
+        //process.exit(0);
 });
 
 //node customer_msg_list.js -u 567 -p 5kBnnT6gSAIFa40q6ekmDvWE -h api.acty.com 1000
