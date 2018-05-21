@@ -1,15 +1,12 @@
 var program = require('commander');
 var momenttz = require("moment-timezone");
 var https = require('https');
-//var request = require('request');
 var fs = require('fs');
 var mongoose = require('mongoose');
 
 let request = require('request-promise');
-//var actyTicket = require('../db/userData_acty.js');
 //HANDLE DEPENDANCES
 //DB CONNECTION
-//mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://127.0.0.1:27017/indilium-db');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
@@ -28,52 +25,6 @@ var userData_acty = mongoose.model("userData_acty", ({
     n_video 			: 	Number
 }));
 
-
-//var userData_acty = mongoose.model('Kitten', kittySchema);
-//var modelUserData_acty = mongoose.model("userData_acty", userData_acty);
-
-//SCHEMA DEFINITION
-//var Schema = mongoose.Schema;
-/*
-var userData_acty = new Schema({
-    tag 				: 	String,
-    id 					: 	String,
-    operatore_lv1       :   String,
-    operatore_lv2       :   String,
-    customer_sat        :   String,
-    data                :   Date,
-    durata              :   Number,
-    n_foto 				: 	Number,
-    n_video 			: 	Number
-});
-var userData_acty = mongoose.model("userData_acty", ({
-    tag 				: 	String,
-    id 					: 	String,
-    operatore_lv1       :   String,
-    operatore_lv2       :   String,
-    customer_sat        :   String,
-    data                :   Date,
-    durata              :   Number,
-    n_foto 				: 	Number,
-    n_video 			: 	Number
-}));
-    
-
-        Modello Macchina 
-        Tipo Problema (Hardware/Software) 
-
-        Tag - Title
-        Operatore 1° Livello  - .customer_id
-        Operatore 2° Livello  - operator
-        Durata intervento  - customer_id
-        Customer Satisfaction - Rank
-        Data
-        Id
-        Numero Attachment Photo
-        Numero Attachment Video
-
-    */
-//5b016d2caa1623ed3602d6c9/0
 async function getAttachment(idAssistenza, totAllegati){
     for(var i=0; i<totAllegati; i++){
         var options = {
@@ -92,45 +43,7 @@ async function getAttachment(idAssistenza, totAllegati){
                     fs.writeFileSync('../files/'+idAssistenza+'_'+i+'.jpeg',buffer);
                 });   
     }
-    //../files/'+
-    //console.log(tmp);
-    
 }
-    //request(options).pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-    //console.log("options: "+options);
-    /*request.get(options)
-    .on('response',function(err, res, body) {
-         console.log(response.statusCode) // 200 
-         body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-     })
-     .on('finish',function(err, res, body) {
-        console.log('finish'+response.statusCode) // 200 
-        body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-    });
-    let tmp = new Promise(resolve =>
-        request(options)
-          .pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato+'.png'))
-          .on('finish', resolve));
-     //request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-
-    /*request(options, function (err, res, body) {
-        if (err) {
-          console.log("err: "+err);
-          return;
-        }
-    })*/
-  /*
-    request({url:tmp,
-             user:'567', 
-             password: '5kBnnT6gSAIFa40q6ekmDvWE'}, function (error, response, body) {
-        if(!error){
-            var res= body.pipe(fs.createWriteStream(idAssistenza+'_'+idAllegato+'.png'));
-            console.log("!errore: "+res);
-            
-        }else{
-            console.log('errore!');
-        }
-    });*/
 
 
 function postJson(host, port, persistentObj, auth, prefix, url, done) {
@@ -172,7 +85,7 @@ function postJson(host, port, persistentObj, auth, prefix, url, done) {
         debug('ERROR failed post into permitted:'+err.message);
         done(err);
     });
-    postReq.write(postData); // even tried to add 'utf8' as second parameter
+    postReq.write(postData);
     postReq.end();
 }
 
@@ -217,11 +130,8 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
         if (err) {
             console.log(err);
         } else {
-            //console.log(httpResul);
-            //console.log(jsonStringify(httpJson));
             httpJson.assistances.forEach(function(element) {
                 if(element){
-                    //console.log(element._id +' roba: '+element.customer_id+' element.date: '+element.date);
                     //CREATE A NEW ACTY RECORD 
                     var actyUser = new userData_acty({
                         tag 				: 	element.title,
@@ -235,13 +145,6 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                         n_video 			: 	element.videos
                     });
                     console.log('actyUser: '+actyUser);
-                    /*actyUser.save(function(err, actyUser) {
-                        if(err){ 
-                            throw err;
-                        }else{
-                            console.log(actyUser)
-                        }
-                    });*/
                     actyUser.save(function (err, actyUser){
                         if (err) return console.error(err);
                             console.log('acty record created')
@@ -250,9 +153,6 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                 }
             });
         }
-        //process.exit(0);
 });
 
-//node customer_msg_list.js -u 567 -p 5kBnnT6gSAIFa40q6ekmDvWE -h api.acty.com 1000
 
-//node customer_msg_list.js -u 567 -p 5kBnnT6gSAIFa40q6ekmDvWE -h api.acty.com 86400
