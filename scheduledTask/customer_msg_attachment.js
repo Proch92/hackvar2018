@@ -1,19 +1,34 @@
 var program = require('commander');
 var momenttz = require("moment-timezone");
 var https = require('https');
-var request = require('request');
+//var request = require('request');
 var fs = require('fs');
+var mongoose = require('mongoose');
+let request = require('request-promise');
 //var actyTicket = require('../db/userData_acty.js');
 //HANDLE DEPENDANCES
-var mongoose = require('mongoose');
-
 //DB CONNECTION
-mongoose.connect('mongodb://localhost:27017/indilium-db');
+mongoose.connect('mongodb://127.0.0.1:27017/indilium-db');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'CONNECTION ERROR:'));
 db.once('open', function() {
         console.log('CONNECTION SUCCESSFUL');
 });
+var userData_acty = mongoose.Schema({
+    tag 				: 	String,
+    id 					: 	String,
+    operatore_lv1       :   String,
+    operatore_lv2       :   String,
+    customer_sat        :   String,
+    data                :   Date,
+    durata              :   Number,
+    n_foto 				: 	Number,
+    n_video 			: 	Number
+});
+
+
+//var userData_acty = mongoose.model('Kitten', kittySchema);
+var modelUserData_acty = mongoose.model("userData_acty", userData_acty);
 
 //SCHEMA DEFINITION
 //var Schema = mongoose.Schema;
@@ -28,7 +43,7 @@ var userData_acty = new Schema({
     durata              :   Number,
     n_foto 				: 	Number,
     n_video 			: 	Number
-});*/
+});
 var userData_acty = mongoose.model("userData_acty", ({
     tag 				: 	String,
     id 					: 	String,
@@ -40,7 +55,7 @@ var userData_acty = mongoose.model("userData_acty", ({
     n_foto 				: 	Number,
     n_video 			: 	Number
 }));
-    /*
+    
 
         Modello Macchina 
         Tipo Problema (Hardware/Software) 
@@ -56,49 +71,53 @@ var userData_acty = mongoose.model("userData_acty", ({
         Numero Attachment Video
 
     */
-
 //5b016d2caa1623ed3602d6c9/0
-function getAttachment(idAssistenza, idAllegato){
+async function getAttachment(idAssistenza, totAllegati){
+    for(var i=0; i<totAllegati; i++){
+        var options = {
+            url: 'https://api.acty.com/wsapi/assistance/attachment/'+idAssistenza+'/'+i,
+            auth: {
+              user: '567',
+              password: '5kBnnT6gSAIFa40q6ekmDvWE'
+            },
+            encoding : null
+          }
+        console.log("getAttachment");
+        let a = await request.get(options)
+                .then(function(res){
+                    console.log('then');
+                    const buffer = Buffer.from(res);
+                    fs.writeFileSync('../files/'+idAssistenza+'_'+i+'.jpeg',buffer);
+                });   
+    }
     //../files/'+
     //console.log(tmp);
-    var options = {
-        url: 'https://api.acty.com/wsapi/assistance/attachment/'+idAssistenza+'/'+idAllegato,
-        auth: {
-          user: '567',
-          password: '5kBnnT6gSAIFa40q6ekmDvWE'
-        }
-      }
-    console.log("options: "+options.url);
-    request.get(options, function(err, res, body) {
+    
+}
+    //request(options).pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
+    //console.log("options: "+options);
+    /*request.get(options)
+    .on('response',function(err, res, body) {
          console.log(response.statusCode) // 200 
          body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-     });
+     })
+     .on('finish',function(err, res, body) {
+        console.log('finish'+response.statusCode) // 200 
+        body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
+    });
+    let tmp = new Promise(resolve =>
+        request(options)
+          .pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato+'.png'))
+          .on('finish', resolve));
+     //request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+
     /*request(options, function (err, res, body) {
         if (err) {
           console.log("err: "+err);
           return;
         }
-        console.dir('headers', res.headers);
-        console.dir('status code', res.statusCode);
-        //console.dir(body)
-        console.log("response: "+response);
-        console.log("body: "+body);
-        body.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
- 
     })*/
-  
-   /* request.get(
-        { url: tmp,
-            {'auth': {
-                'user':'567', 
-                'password':'5kBnnT6gSAIFa40q6ekmDvWE', 
-                'sendImmediately': false
-            }
-        }},function (error, response, body) {});
-              response.pipe(fs.createWriteStream('../files/'+idAssistenza+'/'+idAllegato));
-          */  
-    /*
-    
+  /*
     request({url:tmp,
              user:'567', 
              password: '5kBnnT6gSAIFa40q6ekmDvWE'}, function (error, response, body) {
@@ -110,7 +129,7 @@ function getAttachment(idAssistenza, idAllegato){
             console.log('errore!');
         }
     });*/
-}
+
 
 function postJson(host, port, persistentObj, auth, prefix, url, done) {
     var postData = JSON.stringify(persistentObj);
@@ -202,7 +221,7 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                 if(element){
                     //console.log(element._id +' roba: '+element.customer_id+' element.date: '+element.date);
                     //CREATE A NEW ACTY RECORD 
-                    var actyUser = new userData_acty({
+                    var actyUser = new modelUserData_acty({
                         tag 				: 	element.title,
                         id 					: 	element._id,
                         operatore_lv1       :   element.customer_id,
@@ -213,12 +232,10 @@ postJson( program.host, 443, parm, program.user+":"+program.password, "wsapi", "
                         n_foto 				: 	element.photos,
                         n_video 			: 	element.videos
                     });
-                    actyUser.save(function(err, user1) {
+                    actyUser.save(function(err, actyUser) {
                         if(err) throw err;
                     });
-                    for(var i=0; i<(element.photos + element.videos)-1; i++){
-                        getAttachment(element._id, i);
-                    }
+                    getAttachment(element._id, (element.photos + element.videos));
                 }
             });
         }
