@@ -36,13 +36,28 @@ function insertUser(req, res, next) {
 }
 
 function insertActy(req, res, next) {
-	
+	newacty = new userData_acty({
+		tag				: 	req.params.tagapi,
+		id 				: 	req.params.idapi,
+		operatore_lv1 	: 	req.params.op1api,
+		operatore_lv2 	: 	req.params.op2api,
+		customer_sat 	: 	req.params.custapi,
+		data 			: 	req.params.dataapi,
+		durata 			: 	req.params.durapi,
+		n_foto 			: 	req.params.fotoapi,
+		n_video 		: 	req.params.videoapi 
+	});
+	newacty.save().then(() => console.log('acty record created'));
+
+	res.send(201);
+	next();
 }
 
 var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 
 server.post('/users:sparkid:actyid', insertUser);
+server.post('/acty:tagapi:idapi:op1api:op2api:custapi:dataapi:durapi:fotoapi:videoapi', insertActy);
 
 server.listen(8080, '127.0.0.1', function() {
 	console.log('%s listening at %s', server.name, server.url);
